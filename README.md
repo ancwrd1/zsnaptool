@@ -5,11 +5,12 @@ Snapshots are backed up incrementally from the previous snapshots.
 **NOTE**: This script has been only tested on Linux!
 
 Usage:
-`zsnaptool.sh [-r] [-n] SRCPOOL DSTPOOL`
+`zsnaptool.sh [-r] [-n] [-v] SRCPOOL DSTPOOL`
 
 Options:
 * `-r` act recursively on a given SRCPOOL
 * `-n` dry run - don't do anything, only print actions
+* `-v` verbose output of the 'zfs send' command
 * `SRCPOOL` source pool/filesystem, e.g. **rpool/root**
 * `DSTPOOL` destination pool/filesystem, e.g. **backup/rpool**
 

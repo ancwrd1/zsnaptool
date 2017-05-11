@@ -6,6 +6,7 @@ usage: $0 [options] srcpool destpool
 Options are:
 	-r	Take snapshots recursively
 	-n	Dry run (no actions)
+	-v	Verbose output
 END_OF_HELP
 }
 
@@ -24,12 +25,16 @@ log() {
 SRCPOOL=""
 DESTPOOL=""
 RFLAG=""
+VFLAG=""
 DRY=""
 
 while [ "$1" != "" ]; do
 	case "$1" in
 		-r)
 			RFLAG="-r"
+			;;
+		-v)
+			VFLAG="-v"
 			;;
 		-n)
 			DRY=1
@@ -100,11 +105,11 @@ for fs in $ALLFS; do
 
 	if [ "$parent" != "" ]; then
 		log "Sending incremental from $parent to $DESTPOOL/$fs"
-		zfs_exec "zfs send -i $parent $fs@$prefix | zfs receive -F $DESTPOOL/$fs"
+		zfs_exec "zfs send $VFLAG -i $parent $fs@$prefix | zfs receive -F $DESTPOOL/$fs"
 	else
 		log "Sending initial to $DESTPOOL/$fs"
 		zfs_exec "zfs create -p $DESTPOOL/$fs"
-		zfs_exec "zfs send $fs@$prefix | zfs receive -F $DESTPOOL/$fs"
+		zfs_exec "zfs send $VFLAG $fs@$prefix | zfs receive -F $DESTPOOL/$fs"
 	fi
 
 	log "Finished $fs"
